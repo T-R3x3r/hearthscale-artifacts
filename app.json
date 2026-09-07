@@ -1,0 +1,28 @@
+{
+  "$schema": "https://hearthscale.com/app.schema.json",
+  "id": "artifacts",
+  "name": "Artifacts",
+  "version": "0.1.0",
+  "api": 1,
+  "description": "An artifact that runs. Attach it to any app and its agent can raise a single .html page — a calculator, a form, a little tool — in the Artifact panel, where the page's own script answers clicks. The page is served under a policy computed from its own scripts, it reaches no network, and it never reaches the model.",
+  "license": "MIT",
+  "icon": "icon.svg",
+  "disclosures": {
+    "network": [],
+    "pathsOutsideDataRoot": []
+  },
+  "publishes": { "connector": "artifacts" },
+  "tools": [
+    {
+      "name": "artifact_show",
+      "title": "Show a page you wrote",
+      "description": "Show a single-file .html page in the Artifact panel, so the person can use it. path is the absolute path of a file you already wrote; the page keeps its own state and answers clicks. It reaches no network and cannot talk back to you, so write everything it needs into the one file, and read the file yourself if you want to know what it says.",
+      "mutating": false,
+      "outbound": false,
+      "icon": "eye"
+    }
+  ],
+  "contributes": {
+    "panels": [{ "id": "artifact", "title": "Artifact", "kind": "own", "offersTo": "*" }]
+  }
+}
