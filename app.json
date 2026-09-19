@@ -2,16 +2,23 @@
   "$schema": "https://hearthscale.com/app.schema.json",
   "id": "artifacts",
   "name": "Artifacts",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "api": 1,
-  "description": "An artifact that runs. Attach it to any app and its agent can raise a single .html page — a calculator, a form, a little tool — in the Artifact panel, where the page's own script answers clicks. The page is served under a policy computed from its own scripts, it reaches no network, and it never reaches the model.",
+  "description": "An artifact that runs. Attach it to any app and its agent can raise a single .html page \u2014 a calculator, a form, a little tool \u2014 in the Artifact panel, where the page's own script answers clicks. The page is served under a policy computed from its own scripts, it reaches no network, and it never reaches the model.",
+  "categories": [
+    "coding",
+    "utilities"
+  ],
+  "payment": "free",
   "license": "MIT",
   "icon": "icon.svg",
   "disclosures": {
     "network": [],
     "pathsOutsideDataRoot": []
   },
-  "publishes": { "connector": "artifacts" },
+  "publishes": {
+    "connector": "artifacts"
+  },
   "tools": [
     {
       "name": "artifact_show",
@@ -23,6 +30,13 @@
     }
   ],
   "contributes": {
-    "panels": [{ "id": "artifact", "title": "Artifact", "kind": "own", "offersTo": "*" }]
+    "panels": [
+      {
+        "id": "artifact",
+        "title": "Artifact",
+        "kind": "own",
+        "offersTo": "*"
+      }
+    ]
   }
 }
