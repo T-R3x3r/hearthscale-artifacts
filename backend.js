@@ -1,35 +1,20 @@
 'use strict';
 /**
- * The artifacts plugin's backend: one published tool that names a page and
- * never reads one. `run.artifact` hands the path to the core, which
- * measures it against the roots of the app whose session called the tool
- * and answers the id its document is served under; the record kept here is
- * that id and the name the panel prints.
+ * The Artifacts backend: the one tool an agent calls to show a page. The
+ * page travels in the call's input, which the `page` view renders under
+ * the call; the backend keeps nothing and reads no file.
  */
-const { defineApp, p } = require('@hearthscale/app');
 
-/** The one record the panel reads: the artifact this plugin last raised. */
-const CURRENT = 'artifact';
-
-module.exports = defineApp({
-  async activate(ctx) {
-    await ctx.tools.register({
-      name: 'artifact_show',
-      parameters: p.object(
-        { path: p.string('The absolute path of the .html file to show') },
-        ['path'],
-      ),
-      execute: async (args, run) => {
-        const path = String(args.path);
-        const id = await run.artifact(path);
-        const name = path.split(/[\\/]/).pop();
-        await ctx.store.set(CURRENT, { id, name, path });
-        await ctx.events.emit({ type: 'shown', data: { id }, durable: false });
-        return (
-          `${name} is on screen in the Artifact panel and its own script is running. ` +
-          `The person sees it; you do not, and it cannot send you anything.`
-        );
-      },
-    });
+module.exports = {
+  tools: {
+    show(input) {
+      const title = input.title.trim();
+      if (!title) throw new Error('title names the page in a few words');
+      if (!input.html.trim()) throw new Error('html holds no page');
+      return (
+        `"${title}" is on screen under this call, and its own script is running. ` +
+        'The person sees it; you do not, and it cannot send you anything.'
+      );
+    },
   },
-});
+};
