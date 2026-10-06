@@ -30,7 +30,7 @@ file; a conversation keeps every page it showed, each under its call.
 | --- | --- |
 | `app.json` | The manifest: one tool, offered to the apps Artifacts is attached to, and the view that renders its calls. |
 | `backend.js` | The tool body: it checks the input and tells the agent the page is on screen. |
-| `views/page.js` | The view, a module with no build step: a bar with Run again, and Back to the chat in a tab of its own, and the page's frame. |
+| `views/page.js` | The view, a module with no build step: a bar with Run again, and the page's frame. |
 | `icon.svg` | The mark the client draws wherever the app appears. |
 
 ## Working on it

@@ -109,23 +109,12 @@ function run() {
 const again = barButton(run);
 again.set('refresh-line', 'Run again');
 
-/** Where the host draws the view. */
-const mode = () => app.getHostContext().displayMode;
-
-/** The way back under the call from a tab of its own, where the host
- *  draws no bar of its own over the view. */
-const back = barButton(() => {
-  void app.requestDisplayMode({ mode: 'inline' });
-});
-back.set('fullscreen-exit-line', 'Back to the chat');
-
-/** The bar and the page's box for where the host draws the view. */
+/** The page's box for where the host draws the view. */
 function place() {
-  document.documentElement.dataset.mode = mode();
-  back.element.hidden = mode() !== 'fullscreen';
+  document.documentElement.dataset.mode = app.getHostContext().displayMode;
 }
 
-bar.append(title, again.element, back.element);
+bar.append(title, again.element);
 root.append(bar);
 
 app.ontoolinput = ({ arguments: input }) => {
