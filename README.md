@@ -3,7 +3,8 @@
 The Hearthscale app that makes a page run. Attach it to any app, and that
 app's agent can show you a single page it writes — a calculator, a form, a
 small tool — right in the conversation, where the page's own script answers
-your clicks. A press moves the page into a tab of its own and back.
+your clicks. The bar Hearthscale draws over the page moves it into a tab
+of its own or over the chat, and back.
 
 Artifacts is a headless app: it has no rail button. It offers its one tool,
 `show`, to the apps you attach it to on their settings pages.
@@ -29,7 +30,7 @@ file; a conversation keeps every page it showed, each under its call.
 | --- | --- |
 | `app.json` | The manifest: one tool, offered to the apps Artifacts is attached to, and the view that renders its calls. |
 | `backend.js` | The tool body: it checks the input and tells the agent the page is on screen. |
-| `views/page.js` | The view, a module with no build step: a bar with Run again and Open in a tab, and the page's frame. |
+| `views/page.js` | The view, a module with no build step: a bar with Run again, and Back to the chat in a tab of its own, and the page's frame. |
 | `icon.svg` | The mark the client draws wherever the app appears. |
 
 ## Working on it

@@ -1,12 +1,16 @@
 /**
  * The Artifacts view: the page an agent showed, under the call that showed
- * it or in a tab of its own. The page runs in a frame with
+ * it, in a tab of its own or over the chat. The page runs in a frame with
  * `sandbox="allow-scripts"` and no `allow-same-origin`, so it runs on an
  * opaque origin: it reaches neither this view's bridge nor the window, and
  * this view hears nothing it sends. The frame inherits the view's policy,
  * under which it reaches no network.
  */
-import { App, PostMessageTransport } from '@modelcontextprotocol/ext-apps';
+import {
+  App,
+  PostMessageTransport,
+  McpUiMessageResultSchema as Answer,
+} from '@modelcontextprotocol/ext-apps';
 
 const SHEET = `
 html, body { margin: 0; }
@@ -105,29 +109,33 @@ function run() {
 const again = barButton(run);
 again.set('refresh-line', 'Run again');
 
-/** Where the host draws the view, and whether it may move it. */
+/** Where the host draws the view. */
 const mode = () => app.getHostContext().displayMode;
-const movable = () => app.getHostContext().availableDisplayModes.includes('fullscreen');
 
-const move = barButton(() => {
-  void app.requestDisplayMode({ mode: mode() === 'fullscreen' ? 'inline' : 'fullscreen' });
+/** The way back under the call from a tab of its own, where the host
+ *  draws no bar of its own over the view. */
+const back = barButton(() => {
+  void app.requestDisplayMode({ mode: 'inline' });
 });
+back.set('fullscreen-exit-line', 'Back to the chat');
 
 /** The bar and the page's box for where the host draws the view. */
 function place() {
   document.documentElement.dataset.mode = mode();
-  if (mode() === 'fullscreen') move.set('fullscreen-exit-line', 'Back to the chat');
-  else move.set('fullscreen-line', 'Open in a tab');
-  move.element.hidden = !movable();
+  back.element.hidden = mode() !== 'fullscreen';
 }
 
-bar.append(title, again.element, move.element);
+bar.append(title, again.element, back.element);
 root.append(bar);
 
 app.ontoolinput = ({ arguments: input }) => {
   title.textContent = input.title;
   html = input.html;
   run();
+  // The tab the page moves into takes its title.
+  app
+    .request({ method: 'hearthscale/ui/set-tab', params: { title: input.title } }, Answer)
+    .catch(() => {});
 };
 app.onhostcontextchanged = place;
 
