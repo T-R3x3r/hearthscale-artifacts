@@ -18,8 +18,9 @@ html[data-mode='fullscreen'], html[data-mode='fullscreen'] body,
 html[data-mode='fullscreen'] .artifacts-root { height: 100%; }
 .artifacts-root { display: flex; flex-direction: column; }
 .artifacts-bar {
-  flex: none; display: flex; align-items: center; gap: 4px;
-  height: 38px; box-sizing: border-box; padding: 0 8px 0 14px;
+  flex: none; display: flex; align-items: center; gap: var(--space);
+  height: calc(var(--space) * 9.5); box-sizing: border-box;
+  padding: 0 calc(var(--space) * 2) 0 calc(var(--space) * 3.5);
   border-bottom: var(--bw) solid var(--tipline);
 }
 .artifacts-title {
@@ -29,9 +30,9 @@ html[data-mode='fullscreen'] .artifacts-root { height: 100%; }
 .artifacts-glyph { display: block; width: 1em; height: 1em; line-height: 1; }
 /* A tip shows in the bar beside its button: its plate is translucent and
    does not read over a page, which draws its own background. */
-.artifacts-tip { top: 50%; right: calc(100% + 4px); transform: translateY(-50%); }
+.artifacts-tip { top: 50%; right: calc(100% + var(--space)); transform: translateY(-50%); }
 .hs-shell .hs-panel-button:active .artifacts-glyph { transform: var(--press); opacity: var(--press-fade); }
-.artifacts-page { display: block; width: 100%; height: 440px; border: 0; }
+.artifacts-page { display: block; width: 100%; height: calc(var(--space) * 110); border: 0; }
 html[data-mode='fullscreen'] .artifacts-page { flex: 1; height: auto; min-height: 0; }
 `;
 
