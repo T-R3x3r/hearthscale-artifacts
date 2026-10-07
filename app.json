@@ -36,14 +36,15 @@
     }
   ],
   "capabilities": {
-    "tools": ["show"],
-    "views": [
-      {
-        "id": "page",
-        "title": "Artifact",
-        "entry": "views/page.js",
-        "sizes": ["inline", "fullscreen"]
-      }
-    ]
-  }
+    "tools": ["show"]
+  },
+  "surfaces": [
+    {
+      "id": "page",
+      "kind": "view",
+      "title": "Artifact",
+      "entry": "views/page.js",
+      "placements": ["inline", "modal"]
+    }
+  ]
 }

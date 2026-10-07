@@ -7,7 +7,10 @@ your clicks. The bar Hearthscale draws over the page moves it into a tab
 of its own or over the chat, and back.
 
 Artifacts is a headless app: it has no rail button. It offers its one tool,
-`show`, to the apps you attach it to on their settings pages.
+`show`, to the apps you attach it to on their settings pages. Its one view,
+`page`, is a surface placed `inline` and in a `modal`: it draws under each
+`show` result, and the bar moves it into a tab or over the chat. A surface
+placed only there keeps the app headless.
 
 ## What a page may reach
 
@@ -28,7 +31,7 @@ file; a conversation keeps every page it showed, each under its call.
 
 | File | What it is |
 | --- | --- |
-| `app.json` | The manifest: one tool, offered to the apps Artifacts is attached to, and the view that renders its calls. |
+| `app.json` | The manifest: one tool, offered to the apps Artifacts is attached to, and the view surface that renders its calls. |
 | `backend.js` | The tool body: it checks the input and tells the agent the page is on screen. |
 | `views/page.js` | The view, a module with no build step: a bar with Run again, and the page's frame. |
 | `icon.svg` | The mark the client draws wherever the app appears. |
