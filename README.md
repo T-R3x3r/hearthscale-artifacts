@@ -1,64 +1,17 @@
 # Artifacts
 
-The Hearthscale app that makes a page run. Attach it to any app, and that
-app's agent can show you a single page it writes — a calculator, a form, a
-small tool — right in the conversation, where the page's own script answers
-your clicks. The bar Hearthscale draws over the page moves it into a tab
-of its own or over the chat, and back.
+Artifacts lets an agent show you a small page it wrote, such as a chart of your numbers, a calculator, a checklist you can tick or a quiz, right in the conversation.
 
-Artifacts is a headless app: it has no rail button. It offers its one tool,
-`show`, to the apps you attach it to on their settings pages. Its one view,
-`page`, is a surface placed `inline` and in a `modal`: it draws under each
-`show` result, and the bar moves it into a tab or over the chat. A surface
-placed only there keeps the app headless.
+## Get started
 
-## What a page may reach
+Artifacts has no button on the rail: once it is installed, every app with an agent, such as Ash, can use it. Ask for a page:
 
-Nothing. A page runs in a frame with `sandbox="allow-scripts"` and no
-`allow-same-origin`, so it runs on an opaque origin: it reaches neither the
-view around it nor the window. The frame inherits the view's policy, and
-Artifacts declares no host in `environment.network`, so every request the
-page tries is refused. The page has no route back to the model: the agent
-does not see it, and the view hears nothing the page sends.
+> Make me a page with a tip calculator: the bill, the tip in percent and the number of people.
 
-## What it reads
+The page appears under the agent's step, ready to use. **Run again** starts it from the beginning, **Open in a tab** moves it into a tab beside the conversation, and **Open over the chat** shows it large. To change the page, ask the agent: it writes the page again, and earlier pages stay where they were.
 
-Nothing. The page travels in the call's own input, `title` and `html`, and
-the view renders it under that call. The backend keeps nothing and reads no
-file; a conversation keeps every page it showed, each under its call.
+To keep Artifacts away from one app, switch it off on that app's settings page, under **Headless apps**.
 
-## The folder
+## What Artifacts asks for
 
-| File | What it is |
-| --- | --- |
-| `app.json` | The manifest: one tool, offered to the apps Artifacts is attached to, and the view surface that renders its calls. |
-| `backend.js` | The tool body: it checks the input and tells the agent the page is on screen. |
-| `views/page.js` | The view, a module with no build step: a bar with Run again, and the page's frame. |
-| `icon.svg` | The mark the client draws wherever the app appears. |
-
-## Working on it
-
-With a Hearthscale platform running on this machine:
-
-```
-hearthscale dev .
-```
-
-links this folder into the running platform, picks up every change, and
-asks once in the window before any code runs.
-
-## Releasing
-
-Install the Hearthscale registry's GitHub App on this repository once. Then
-every release whose tag equals `version` in `app.json` is picked up by the
-Marketplace.
-
-```
-hearthscale pack .
-```
-
-builds the package to attach to the release.
-
-## Licence
-
-MIT. See `LICENSE`.
+Nothing beyond its own place. A page is kept apart from everything else: it cannot reach the internet, your files or the conversation, and nothing on it goes back to the agent.
