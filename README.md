@@ -1,34 +1,40 @@
 # Artifacts
 
-The Hearthscale plugin that makes an artifact run. Attach its `artifacts`
-connector to any app, place its **Artifact** panel into that app's window,
-and the app's agent can raise a single `.html` page it wrote — a calculator,
-a form, a small tool — where the page's own script answers clicks.
+The Hearthscale app that makes a page run. Attach it to any app, and that
+app's agent can show you a single page it writes — a calculator, a form, a
+small tool — right in the conversation, where the page's own script answers
+your clicks. The bar Hearthscale draws over the page moves it into a tab
+of its own or over the chat, and back.
 
-## What it may reach
+Artifacts is a headless app: it has no rail button. It offers its one tool,
+`show`, to the apps you attach it to on their settings pages. Its one view,
+`page`, is a surface placed `inline` and in a `modal`: it draws under each
+`show` result, and the bar moves it into a tab or over the chat. A surface
+placed only there keeps the app headless.
 
-Nothing. `disclosures.network` is empty, so the page is served under
-`connect-src 'none'` and every request it tries is refused by the browser.
-Its `script-src` is computed, on every load, from the hashes of that one
-file's own inline scripts, so it runs its own code and no other. It has no
-route back to the model: an artifact reads and draws, and the agent is what
-calls a model.
+## What a page may reach
 
-## What it may read
+Nothing. A page runs in a frame with `sandbox="allow-scripts"` and no
+`allow-same-origin`, so it runs on an opaque origin: it reaches neither the
+view around it nor the window. The frame inherits the view's policy, and
+Artifacts declares no host in `environment.network`, so every request the
+page tries is refused. The page has no route back to the model: the agent
+does not see it, and the view hears nothing the page sends.
 
-The plugin names a path and never reads one. `artifact_show` hands the path
-to the platform, which measures it against the roots of the app whose
-session called the tool — so attaching this connector widens nothing that
-app could not already open, and the plugin holds no root of its own.
+## What it reads
+
+Nothing. The page travels in the call's own input, `title` and `html`, and
+the view renders it under that call. The backend keeps nothing and reads no
+file; a conversation keeps every page it showed, each under its call.
 
 ## The folder
 
 | File | What it is |
 | --- | --- |
-| `app.json` | The manifest: the `artifacts` connector, one tool, one panel. |
-| `backend.js` | The tool body: it names the path and records the document. |
-| `ui.js` | The panel: a sandboxed frame over the document the core serves. |
-| `icon.svg` | The mark the client draws wherever the plugin appears. |
+| `app.json` | The manifest: one tool, offered to the apps Artifacts is attached to, and the view surface that renders its calls. |
+| `backend.js` | The tool body: it checks the input and tells the agent the page is on screen. |
+| `views/page.js` | The view, a module with no build step: a bar with Run again, and the page's frame. |
+| `icon.svg` | The mark the client draws wherever the app appears. |
 
 ## Working on it
 
@@ -38,16 +44,20 @@ With a Hearthscale platform running on this machine:
 hearthscale dev .
 ```
 
-links this folder into the running platform and rebuilds on every change.
+links this folder into the running platform, picks up every change, and
+asks once in the window before any code runs.
 
 ## Releasing
+
+Install the Hearthscale registry's GitHub App on this repository once. Then
+every release whose tag equals `version` in `app.json` is picked up by the
+Marketplace.
 
 ```
 hearthscale pack .
 ```
 
-builds the zip to attach to a GitHub release whose tag equals `version` in
-`app.json`.
+builds the package to attach to the release.
 
 ## Licence
 

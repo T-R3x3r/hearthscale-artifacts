@@ -2,41 +2,49 @@
   "$schema": "https://hearthscale.com/app.schema.json",
   "id": "artifacts",
   "name": "Artifacts",
-  "version": "0.1.1",
-  "api": 1,
-  "description": "An artifact that runs. Attach it to any app and its agent can raise a single .html page \u2014 a calculator, a form, a little tool \u2014 in the Artifact panel, where the page's own script answers clicks. The page is served under a policy computed from its own scripts, it reaches no network, and it never reaches the model.",
-  "categories": [
-    "coding",
-    "utilities"
-  ],
-  "payment": "free",
+  "version": "1.0.0",
+  "api": 6,
+  "description": "Pages that run. Attach it to any app, and its agent can show you a single page it writes — a calculator, a form, a little tool — right in the conversation, where the page's own script answers your clicks. A page reaches no network, and it never reaches the model.",
   "license": "MIT",
+  "categories": ["utilities"],
+  "payment": "free",
   "icon": "icon.svg",
-  "disclosures": {
-    "network": [],
-    "pathsOutsideDataRoot": []
-  },
-  "publishes": {
-    "connector": "artifacts"
-  },
+  "environment": { "kind": "process" },
   "tools": [
     {
-      "name": "artifact_show",
+      "name": "show",
       "title": "Show a page you wrote",
-      "description": "Show a single-file .html page in the Artifact panel, so the person can use it. path is the absolute path of a file you already wrote; the page keeps its own state and answers clicks. It reaches no network and cannot talk back to you, so write everything it needs into the one file, and read the file yourself if you want to know what it says.",
+      "description": "Show the person a page you write: one whole HTML document with its scripts and styles inline, such as a calculator, a form or a small tool. It shows under this call, where its own script answers the person's clicks, and the person can open it in a tab. It reaches no network, so it loads nothing by address: no script, style, font or picture from elsewhere. It cannot send you anything and you do not see it, so put everything it needs into html. To change the page, call this again with the whole new page.",
+      "input": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "A few words naming the page, as the person reads them"
+          },
+          "html": {
+            "type": "string",
+            "description": "The whole page: one HTML document with its scripts and styles inline"
+          }
+        },
+        "required": ["title", "html"]
+      },
       "mutating": false,
       "outbound": false,
+      "view": "page",
       "icon": "eye"
     }
   ],
-  "contributes": {
-    "panels": [
-      {
-        "id": "artifact",
-        "title": "Artifact",
-        "kind": "own",
-        "offersTo": "*"
-      }
-    ]
-  }
+  "capabilities": {
+    "tools": ["show"]
+  },
+  "surfaces": [
+    {
+      "id": "page",
+      "kind": "view",
+      "title": "Artifact",
+      "entry": "views/page.js",
+      "placements": ["inline", "modal"]
+    }
+  ]
 }
