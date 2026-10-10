@@ -36,7 +36,7 @@ html[data-mode='fullscreen'] .artifacts-root { height: 100%; }
 html[data-mode='fullscreen'] .artifacts-page { flex: 1; height: auto; min-height: 0; }
 `;
 
-const app = new App({ name: 'Artifacts', version: '1.0.0' }, {});
+const app = new App({ name: 'Artifacts', version: '1.0.1' }, {});
 
 /** A Remix Icon by its remixicon.com name, at a size in pixels. */
 function glyph(name, size) {

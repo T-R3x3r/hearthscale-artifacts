@@ -2,7 +2,7 @@
   "$schema": "https://hearthscale.com/app.schema.json",
   "id": "artifacts",
   "name": "Artifacts",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "api": 6,
   "description": "Pages that run. Attach it to any app, and its agent can show you a single page it writes — a calculator, a form, a little tool — right in the conversation, where the page's own script answers your clicks. A page reaches no network, and it never reaches the model.",
   "license": "MIT",
