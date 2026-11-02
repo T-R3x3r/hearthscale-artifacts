@@ -44,15 +44,9 @@ function glyph(name, size) {
   return mark;
 }
 
-/** The distance of a tip from its button, and from the edges of the
- *  view, in pixels. */
 const TIP_OFFSET = 6;
 const TIP_PAD = 8;
 
-/** A square button of the bar with its tooltip. The tip floats over the
- *  page at the button's left, or under the button where the left has no
- *  room, and stays whole inside the view; a press closes it until the
- *  pointer comes back. */
 function barButton(onPress) {
   const button = document.createElement('span');
   button.className = 'hs-hovbox-ink hs-inkdim hs-panel-button';
