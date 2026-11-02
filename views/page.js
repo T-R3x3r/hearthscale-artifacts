@@ -84,7 +84,7 @@ function barButton(onPress) {
   };
   const hide = () => floating.remove();
   button.addEventListener('mouseenter', show);
-  button.addEventListener('focus', show);
+  button.addEventListener('focus', () => button.matches(':focus-visible') && show());
   button.addEventListener('mouseleave', hide);
   button.addEventListener('blur', hide);
   button.addEventListener('pointerdown', hide);
@@ -100,6 +100,7 @@ function barButton(onPress) {
       button.setAttribute('aria-label', label);
       words.textContent = label;
       button.replaceChildren(glyph(icon, 14));
+      if (floating.isConnected) show();
     },
   };
 }
