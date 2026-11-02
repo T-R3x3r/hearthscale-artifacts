@@ -28,9 +28,6 @@ html[data-mode='fullscreen'] .artifacts-root { height: 100%; }
   font-size: var(--fs-sm); color: var(--mut);
 }
 .artifacts-glyph { display: block; width: 1em; height: 1em; line-height: 1; }
-/* A tip shows in the bar beside its button: its plate is translucent and
-   does not read over a page, which draws its own background. */
-.artifacts-tip { top: 50%; right: calc(100% + var(--space)); transform: translateY(-50%); }
 .hs-shell .hs-panel-button:active .artifacts-glyph { transform: var(--press); opacity: var(--press-fade); }
 .artifacts-page { display: block; width: 100%; height: calc(var(--space) * 110); border: 0; }
 html[data-mode='fullscreen'] .artifacts-page { flex: 1; height: auto; min-height: 0; }
@@ -47,25 +44,50 @@ function glyph(name, size) {
   return mark;
 }
 
-/** A square button of the bar with its tooltip, which a press closes
- *  until the pointer leaves. */
+/** The distance of a tip from its button, and from the edges of the
+ *  view, in pixels. */
+const TIP_OFFSET = 6;
+const TIP_PAD = 8;
+
+/** A square button of the bar with its tooltip. The tip floats over the
+ *  page at the button's left, or under the button where the left has no
+ *  room, and stays whole inside the view; a press closes it until the
+ *  pointer comes back. */
 function barButton(onPress) {
   const button = document.createElement('span');
-  button.className = 'hs-hovbox-ink hs-tipwrap hs-inkdim hs-panel-button';
+  button.className = 'hs-hovbox-ink hs-inkdim hs-panel-button';
   button.setAttribute('role', 'button');
   button.tabIndex = 0;
+  const floating = document.createElement('div');
+  floating.className = 'hs-menu-position hs-floating-tip';
   const tip = document.createElement('span');
-  tip.className = 'hs-tip hs-tooltip artifacts-tip';
+  tip.className = 'hs-tip hs-tooltip';
   tip.dataset.sub = 'false';
   const words = document.createElement('span');
   words.className = 'hs-tooltip-title';
   tip.append(words);
-  button.addEventListener('pointerdown', () => {
-    button.dataset.tipClosed = 'true';
-  });
-  button.addEventListener('mouseleave', () => {
-    delete button.dataset.tipClosed;
-  });
+  floating.append(tip);
+  const show = () => {
+    document.body.append(floating);
+    const at = button.getBoundingClientRect();
+    const box = floating.getBoundingClientRect();
+    let left = at.left - TIP_OFFSET - box.width;
+    let top = at.top + (at.height - box.height) / 2;
+    if (left < TIP_PAD) {
+      left = at.left;
+      top = at.bottom + TIP_OFFSET;
+    }
+    left = Math.max(TIP_PAD, Math.min(left, innerWidth - TIP_PAD - box.width));
+    top = Math.max(TIP_PAD, Math.min(top, innerHeight - TIP_PAD - box.height));
+    floating.style.left = `${left + scrollX}px`;
+    floating.style.top = `${top + scrollY}px`;
+  };
+  const hide = () => floating.remove();
+  button.addEventListener('mouseenter', show);
+  button.addEventListener('focus', show);
+  button.addEventListener('mouseleave', hide);
+  button.addEventListener('blur', hide);
+  button.addEventListener('pointerdown', hide);
   button.addEventListener('click', onPress);
   button.addEventListener('keydown', (e) => {
     if (e.key !== 'Enter' && e.key !== ' ') return;
@@ -77,7 +99,7 @@ function barButton(onPress) {
     set(icon, label) {
       button.setAttribute('aria-label', label);
       words.textContent = label;
-      button.replaceChildren(glyph(icon, 14), tip);
+      button.replaceChildren(glyph(icon, 14));
     },
   };
 }
